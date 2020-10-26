@@ -9,7 +9,6 @@ static void get_input(Input *input)
 		SDL_GetMouseState(&input->mouse_x, &input->mouse_y);
 		if (event.type == SDL_QUIT)
 			exit(0);
-		//if (MOUSE_IN && event.type == SDL_MOUSEMOTION)
 		if (KEY_IN && event.type == SDL_KEYDOWN)
 			input->key = event.key.keysym.scancode;
 	}
@@ -26,16 +25,6 @@ void update_buttons(Master *master)
 
 	if (n >= 0 && n <= 25)
 		render_button(master, master->Grid[n].buttons[0].hitbox, master->Grid[n].buttons[0].color_clicked);
-/* 	for (int i = 0; i < SCREEN_DIVX * SCREEN_DIVY; i++)
-	{
-	//printf("Start %d\n", n);
-		if (master->Grid[i].buttons[0].is_click)
-			render_button(master, master->Grid[i].buttons[0].hitbox, master->Grid[i].buttons[0].color_clicked);
-		else
-			render_button(master, master->Grid[i].buttons[0].hitbox, master->Grid[i].buttons[0].color_default);
-		master->Grid[i].buttons[0].is_click = false;
-	} */
-//	printf("End \n");
 }
 
 void update(Master *master)

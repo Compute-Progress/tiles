@@ -25,7 +25,6 @@ Master *init(Display *display)
 		{
 			rect.x = (i % SCREEN_DIVX) * (WIN_W / SCREEN_DIVX);
 			rect.y = (i / SCREEN_DIVY) * (WIN_H / SCREEN_DIVY);
-			printf("%d, %d\n", rect.x, rect.y);
 			master->Grid[i].buttons[n].hitbox = rect;
 			master->Grid[i].buttons[n].is_click = false;
 			master->Grid[i].buttons[n].button_click = &test_button_release;
@@ -47,8 +46,6 @@ Display *display_init()
 	Uint32 render_flags = SDL_RENDERER_SOFTWARE;
 
 	display = malloc(sizeof(Display));
-	//display->spritesheet = malloc(sizeof(SDL_Rect) * ((VAL * VAL) * VAL));
-
 	display->window = SDL_CreateWindow(WIN_NAME, WIN_X, WIN_Y, WIN_W, WIN_H, WIN_FLAGS);
 	display->renderer = SDL_CreateRenderer(display->window, -1, render_flags);
 	display->state = 1;
