@@ -44,12 +44,43 @@ typedef union	u_color_rgba
 	}		bit_data;
 }			color_rgba;
 
+
+typedef enum Button_Mask
+{
+    //Rename hthese to names with less conflicts probability
+	DIR_NONE	= 0b000000000000000,
+	A	        = 0b000000000000001,
+	DIR_RIGHT	= 0b000000000000010,
+	DIR_DOWN	= 0b000000000000100,
+	DIR_UP		= 0b000000000001000,
+	TRIGG_L		= 0b000000000100000,
+	TRIGG_R		= 0b000000001000000,
+	BUTTON_L	= 0b000000010000000,
+	BUTTON_R	= 0b000000100000000,
+	DIR_LEFT    = 0b000001000000000,
+	B		    = 0b000010000000000,
+	Y		    = 0b000100000000000,
+	X		    = 0b001000000000000,
+	SELECT		= 0b010000000000000,
+	START		= 0b100000000000000,
+}	Button_Mask;
 typedef struct	s_input
 {
-	SDL_Scancode key;
+	SDL_Point	prim_click_pos;
+	SDL_bool	prim_down;
 
-	int 		mouse_x;
-	int 		mouse_y;
+	SDL_Point	sec_click_pos;
+	// If secondary button is still down after iterating through all the enemies,
+	// it means that none of them were Glory kills and to the user meant to
+	// jump.
+	SDL_bool	sec_down;
+
+	// This will be used for going LEFT, RIGHT, DOWN, UP in menu items
+	Button_Mask	b_mask;
+    SDL_GameController *controller;
+    bool        mouse;
+    int         index;
+    int         mask;
 }				Input;
 
 typedef struct s_display
@@ -65,16 +96,13 @@ typedef struct s_display
 
 typedef struct s_button
 {
+    int         index;
 	SDL_Rect hitbox;
 	SDL_Texture *tex;
 
 	color_rgba color_clicked;
 	color_rgba color_default;
 
-	bool is_click;
-
-	func button_click;
-	func button_release;
 }			button;
 
 typedef struct
@@ -83,11 +111,19 @@ typedef struct
 	int max;
 	int current;
 }		screen_div;
+// The primary click can also be used to
 
+// Primary click controls Fire and Switch Weapons
+// If they get added it will also control special, Flame Thrower, Chainsaw
+
+// Secondary click controls jump movement and Glory Kills
+// If it gets added will have velocity for dash direction.
 typedef struct s_master
 {
 	Display *display;
 	screen_div *Grid;
+    button      *buttons;
+    int         b_total;
 }				Master;
 
 /* File : display_init.c */
@@ -98,10 +134,14 @@ void	annhilate(Display *display);
 void	ref_texture(SDL_Rect *ref, int width, int length);
 
 /*File update.c */
-void	update(Display *display);
+void	update(Master *master);
 
-void test_button_release(Master *master, button *button);
+bool    isBoxCollide(int x, int y);
+
 void test_button_click(Master *master, button *button);
+void test_button_hover(Master *master, button *button);
+void test_button_render(Master *master, button *button);
+
 Master *init(Display *display);
-void render_button(Master *master, SDL_Rect rect, color_rgba  color);
+void render_button(Master *master, SDL_Rect rect, color_rgba  color, bool fill);
 #endif

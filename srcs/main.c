@@ -1,6 +1,5 @@
 #include "SDL_Master.h"
 
-
 int main()
 {
 	Display *display;
@@ -8,6 +7,7 @@ int main()
 
 	display = display_init();
 	master = init(display);
+
 
 	update(master);
 }
